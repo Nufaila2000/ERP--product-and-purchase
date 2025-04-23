@@ -1,0 +1,117 @@
+<form [formGroup]="purchaseOrderForm" (ngSubmit)="onSubmit()" class="mt-4">
+
+    <!-- Vendor Selection -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Vendor</mat-label>
+      <mat-select formControlName="vendor" required>
+        <mat-option *ngFor="let vendor of vendors" [value]="vendor.name">
+          {{ vendor.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="purchaseOrderForm.get('vendor')?.hasError('required')">
+        Vendor is required
+      </mat-error>
+    </mat-form-field>
+  
+    <!-- Line Items Header -->
+    <h5 class="mt-4 mb-3 text-primary d-flex align-items-center">
+      <mat-icon class="me-2">inventory_2</mat-icon> Line Items
+    </h5>
+  
+    <!-- Line Items -->
+    <div formArrayName="lineItems">
+      <div *ngFor="let lineItem of lineItems.controls; let i = index" [formGroupName]="i" class="bg-white border rounded shadow-sm p-4 mb-4">
+  
+        <!-- Line Item Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="mb-0 text-secondary">Item {{ i + 1 }}</h6>
+          <button mat-icon-button color="warn" (click)="removeLineItem(i)" type="button" matTooltip="Remove Line Item">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </div>
+  
+        <!-- Form Fields Row -->
+        <div class="row g-3">
+          <!-- Product -->
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Product</mat-label>
+              <mat-select formControlName="product" required>
+                <mat-option *ngFor="let product of products" [value]="product.id">{{ product.title }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="lineItem.get('product')?.hasError('required')">Product is required</mat-error>
+            </mat-form-field>
+          </div>
+  
+          <!-- Quantity -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Quantity</mat-label>
+              <input matInput type="number" min="1" formControlName="quantity" required>
+              <mat-error *ngIf="lineItem.get('quantity')?.hasError('required')">Quantity is required</mat-error>
+              <mat-error *ngIf="lineItem.get('quantity')?.hasError('min')">Must be at least 1</mat-error>
+            </mat-form-field>
+          </div>
+  
+          <!-- Tax -->
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Tax (%)</mat-label>
+              <input matInput type="number" min="0" formControlName="tax" required>
+              <mat-error *ngIf="lineItem.get('tax')?.hasError('required')">Tax is required</mat-error>
+              <mat-error *ngIf="lineItem.get('tax')?.hasError('min')">Must be 0 or more</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Add Line Item Button -->
+    <div class="text-center mb-4">
+      <button mat-flat-button color="primary" type="button" (click)="addLineItem()" class="px-4 py-2">
+        <mat-icon class="me-2">add_circle</mat-icon> Add Another Line Item
+      </button>
+    </div>
+  
+    <!-- Totals -->
+   <!-- Totals -->
+<div class="mt-4" *ngIf="lineItems.controls.length > 0">
+    <div class="card shadow-sm border-0">
+      <div class="card-body bg-light rounded">
+        <h6 class="mb-3 text-primary d-flex align-items-center">
+          <mat-icon class="me-2">calculate</mat-icon> Summary
+        </h6>
+        <div class="row">
+          <div class="col-md-4">
+            <p class="mb-2"><strong>Total Before Tax:</strong></p>
+            <p class="text-success">{{ getTotalBeforeTax() | currency }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="mb-2"><strong>Total Tax:</strong></p>
+            <p class="text-info">{{ getTotalTax() | currency }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="mb-2"><strong>Grand Total:</strong></p>
+            <p class="text-danger fw-bold">{{ getGrandTotal() | currency }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Submit -->
+ <!-- Submit -->
+<div class="text-end mt-4">
+    <button mat-raised-button color="primary" style="background-color: rgb(52, 52, 127); color: white;"
+            type="submit"
+            class="px-5 py-3 fs-6 fw-bold shadow-sm rounded-pill text-uppercase d-inline-flex align-items-center gap-2"
+            [disabled]="purchaseOrderForm.invalid">
+      <mat-icon>check_circle</mat-icon>
+      Submit Order
+    </button>
+  </div>
+  
+  
+  
+  </form>
+  

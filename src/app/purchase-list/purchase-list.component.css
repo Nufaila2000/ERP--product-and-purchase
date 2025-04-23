@@ -1,0 +1,23 @@
+table {
+    th {
+      font-size: 0.85rem;
+      color: #555;
+    }
+  
+    td {
+      font-size: 0.95rem;
+    }
+  
+    .mat-raised-button {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+  
+    .badge {
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      border-radius: 0.5rem;
+    }
+  }
+  

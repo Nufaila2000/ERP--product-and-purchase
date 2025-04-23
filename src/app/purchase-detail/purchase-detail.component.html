@@ -1,0 +1,57 @@
+<div class="p-4 bg-white shadow rounded-4">
+  
+    <h3 class="fw-bold text-primary mb-3">
+      Purchase Order #{{ purchaseOrder?.poNumber }}
+    </h3>
+  
+   
+    <div class="mb-4">
+      <p><strong>Vendor:</strong> {{ purchaseOrder?.vendor }}</p>
+      <p><strong>Date:</strong> {{ purchaseOrder?.date }}</p>
+      <p><strong>Status:</strong> 
+        <span [ngClass]="{
+          'badge bg-success': purchaseOrder?.status === 'Approved',
+          'badge bg-danger': purchaseOrder?.status === 'Rejected',
+          'badge bg-secondary': purchaseOrder?.status !== 'Approved' && purchaseOrder?.status !== 'Rejected'
+        }">{{ purchaseOrder?.status }}</span>
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <h4 class="mb-3">Line Items</h4>
+      <table mat-table [dataSource]="purchaseOrder?.lineItems" class="mat-elevation-z1 w-100">
+  
+      
+        <ng-container matColumnDef="product">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase">Product</th>
+          <td mat-cell *matCellDef="let item">{{ item.productName }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase">Quantity</th>
+          <td mat-cell *matCellDef="let item">{{ item.quantity }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase">Total</th>
+          <td mat-cell *matCellDef="let item">{{ item.total | currency }}</td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="['product', 'quantity', 'total']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['product', 'quantity', 'total']"></tr>
+      </table>
+    </div>
+  
+    <div class="d-flex flex-wrap gap-2 justify-content-end">
+      <button mat-raised-button color="warn" (click)="reject()" class="fw-semibold">
+        <mat-icon class="me-1">cancel</mat-icon> Reject
+      </button>
+      <button mat-raised-button color="accent" (click)="approve()" class="fw-semibold">
+        <mat-icon class="me-1">check_circle</mat-icon> Approve
+      </button>
+      <button mat-raised-button color="primary" (click)="submit()" class="fw-bold px-4 py-2 text-uppercase">
+        <mat-icon class="me-1">send</mat-icon> Submit
+      </button>
+    </div>
+  </div>
+  

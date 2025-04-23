@@ -1,0 +1,85 @@
+<mat-form-field appearance="outline" class="w-100 search-box">
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter products" />
+  </mat-form-field>
+  
+  <div class="mat-elevation-z2 mt-3">
+    <table mat-table [dataSource]="dataSource" class="mat-table" matSort>
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let product"> {{ product.id }} </td>
+      </ng-container>
+  
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let product">
+          <ng-container *ngIf="!product.isEditing">
+            {{ product.title }}
+          </ng-container>
+          <ng-container *ngIf="product.isEditing">
+            <input matInput [(ngModel)]="product.title" />
+          </ng-container>
+        </td>
+      </ng-container>
+  
+      <!-- Category Column -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+        <td mat-cell *matCellDef="let product">
+          <ng-container *ngIf="!product.isEditing">
+            {{ product.category }}
+          </ng-container>
+          <ng-container *ngIf="product.isEditing">
+            <input matInput [(ngModel)]="product.category" />
+          </ng-container>
+        </td>
+      </ng-container>
+  
+      <!-- Price Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+        <td mat-cell *matCellDef="let product">
+          <ng-container *ngIf="!product.isEditing">
+            ${{ product.price }}
+          </ng-container>
+          <ng-container *ngIf="product.isEditing">
+            <input matInput [(ngModel)]="product.price" type="number" />
+          </ng-container>
+        </td>
+      </ng-container>
+  
+      <!-- Stock Column -->
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef> Stock </th>
+        <td mat-cell *matCellDef="let product">
+          <ng-container *ngIf="!product.isEditing">
+            {{ getRandomStockLevel() }}
+          </ng-container>
+          <ng-container *ngIf="product.isEditing">
+            {{ getRandomStockLevel() }}
+          </ng-container>
+        </td>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let product">
+          <button mat-icon-button color="primary" (click)="editProduct(product)">
+            <mat-icon>{{ product.isEditing ? 'save' : 'edit' }}</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteProduct(product)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <mat-paginator [length]="products.length" [pageSize]="5" showFirstLastButtons></mat-paginator>
+  </div>
+  
